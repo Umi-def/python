@@ -1,125 +1,12 @@
 import os
-
-import requests
-
-
-class GeckoDriver:
-    ENDPOINT: str = "https://api.coingecko.com/api/v3"
-
-    def __init__(self):
-        pass
-
-    def ping(self) -> tuple[requests.codes, dict]:
-        """
-        ping
-
-        the endpoint is `https://api.coingecko.com/api/v3/ping`
-
-        Returns
-        -------
-        tuple[requests.codes, dict]
-            詰まるところ,APIレスポンスのステータスコードとJSONを返したい
-
-        >>> driver = GeckoDriver()
-        >>> status_code, res = driver.ping()
-        >>> print(status_code)
-        200
-        >>> print(res)
-        {...}
-
-        Personのデータコレクションを返す
-        public class Person
-            {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            }
-
-        public class PersonsController : ApiController
-            {
-                public IEnumerable<Person> Get()
-                {
-                    var list = new List<Person>()
-                    {
-                        new Person() { Id = 1, Name = "taro" },
-                        new Person() { Id = 2, Name = "hanako" }
-                    };
-                    return list;
-                }
-            }
-        objectがたを返す
-        public object Get()
-            {
-            string[] members = new string[] {"taro", "hanako"};
-            return new { name = "groupA", members = members };
-            }
-
-        """
-        res = requests.get(os.path.join(self.ENDPOINT, "ping"))
-        return res.status_code, res.json()
-
-    def get_coins_list(self) -> tuple[requests.codes, dict]:
-        """
-        get_coins_list
-
-        the endpoint is `https://api.coingecko.com/api/v3/coins/list`
-
-        Returns
-        -------
-        tuple[requests.codes, dict]
-            詰まるところ,APIレスポンスのステータスコードとJSONを返したい
-
-        >>> driver = GeckoDriver()
-        >>> status_code, res = driver.get_coins_list()
-        >>> print(status_code)
-        200
-        >>> print(res)
-        {...}
-        """
-
-    def get_coins_symbol(self) -> list[str]:
-        """
-        get_coins_symbol
-            self.get_coins_listを呼び,そのJSONのidの部分だけ取り出すコードを書いてください．
-            これはJSONに慣れるためです,
-
-        Returns
-        -------
-        list[str]
-            IDの部分だけ取り出してリストを返したい,
-
-        >>> driver = GeckoDriver()
-        >>> status_code, res = driver.ping()
-        >>> print(status_code)
-        200
-        >>> print(res)
-        ['01coin', 'zoc', '01coin', '0-5x-long-algorand-token', 'algohalf', ...]
-        
-        public Customer GetCustomer(int id)
-            {
-                // Customersテーブルから、idが一致するデータを取得
-                Customer customer = db.Customers.Find(id);
-                if (customer == null)
-                    {
-                        // 一致するデータ存在しない場合は、ステータス・コード404を返す
-                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound)); // ……（1）
-                    }
-                // Customerデータを返す
-                return customer;
-            }
-        
-        
-        
-        """
-
-
-        import os
+from symtable import Symbol
 import requests
 import typing 
 
 class GeckoDriver:
-    ENDPOINT:str = "https://api.coingecko.com/api/v3/"
+    ENDPOINT:str = "https://api.coingecko.com/api/v3/" # クラスのメンバ
 
-    def __init__(self):
+    def __init__(self): # インスタンス化で呼ばれる
         pass
 
     def ping(self) ->typing.Tuple[str, dict]:
@@ -184,11 +71,18 @@ class GeckoDriver:
         >>> print(res)
         ['01coin', 'zoc', '01coin', '0-5x-long-algorand-token', 'algohalf', ...]
         """
+       # _, res = self.get_coins_list()
+        
         status_code, res=self.get_coins_list()
-        res_list=[]
-        for i in res:
-            res_list.append(i['id'])
+        # _,res = self.get_coins_list() _にする理由：使わない変数なのでメモリ削減
+        res_list=[coin["symbol"]  for coin in res]
+        # 内包表記で上のが見やすくて速い　symbolはidと同じ
+        # 辞書(coin)はこうやって書く
         return res_list
+        # res_list=[]
+        # for i in res:
+        #     res_list.append(i['id'])
+        # return res_list
 
 driver = GeckoDriver()
 res = driver.get_coins_symbol()

@@ -3,7 +3,21 @@ class Abekobe(object):
         self.num = num
 
     def __add__(self, other):
-        return self.num - other.num
+        return self.num - other
+
+    def __sub__(self, other):
+        return self.num + other 
+    
+    def __mul__(self, other):
+        if other == 0:
+            raise ValueError
+        return self.num / other
+ 
+    def __truediv__(self, other):
+        return self.num * other
+
+    
+
 
 
 """
